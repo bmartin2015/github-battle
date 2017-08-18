@@ -1,23 +1,23 @@
 import axios from 'axios';
 
 const id = 'CLIENT_ID';
-const sec = 'SECRET_KEY';
+const sec = 'CLIENT_SECRET';
 const params = `?client_id=${id}&client_secret=${sec}`;
 
 function getProfile(username) {
-  return axios.get('https://api.gethub.com/users/' + username + params).then(user => {
+  return axios.get('https://api.github.com/users/' + username + params).then(user => {
     return user.data;
   });
 }
 
 function getRepos(username) {
-  return axios.get('https://api.gethub.com/users/' + username + '/repos' + params + '&per_page=100').then(user => {
+  return axios.get('https://api.github.com/users/' + username + '/repos' + params + '&per_page=100').then(user => {
     return user.data;
   });
 }
 
 function getStarCount(repos) {
-  return repos.data.reduce((count, repo) => {
+  return repos.reduce((count, repo) => {
     return count + repo.stargazers_count;
   }, 0);
 }
@@ -35,9 +35,9 @@ function handleError(error) {
 }
 
 function getUserData(player) {
-  axios.all([getProfile(player), getReposo(player)]).then(data => {
-    const profile = data[0];
-    const repos = data[1];
+  return axios.all([getProfile(player), getRepos(player)]).then(data => {
+    var profile = data[0];
+    var repos = data[1];
 
     return {
       profile: profile,
@@ -54,7 +54,7 @@ function sortPlayers(players) {
 
 module.exports = {
   battle: players => {
-    return axios.all(players.map(getUserData)).then(sortPlayers);
+    return axios.all(players.map(getUserData)).then(sortPlayers).catch(handleError);
   },
 
   fetchPopularRepos: language => {
