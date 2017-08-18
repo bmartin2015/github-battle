@@ -4,9 +4,10 @@
   "description": "Keep up on learning React",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "create": "webpack",
-    "start": "webpack-dev-server"
+    "start": "webpack-dev-server",
+    "build": "NODE_ENV='production' webpack -p",
+    "deploy": "yarn run build && firebase deploy",
+    "firebase-init": "firebase login && firebase init"
   },
   "babel": {
     "presets": [
@@ -29,6 +30,7 @@
     "babel-preset-env": "^1.6.0",
     "babel-preset-react": "^6.24.1",
     "css-loader": "^0.28.5",
+    "firebase-tools": "^3.9.2",
     "html-webpack-plugin": "^2.30.1",
     "prop-types": "^15.5.10",
     "style-loader": "^0.18.2",
